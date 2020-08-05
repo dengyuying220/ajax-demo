@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ajax</title>
+    </head>
+    <body>
+        <input type="text" id="username">
+        <input type="number" id="age">
+        <input type="button" id="btn" value="提交">
+        <script>
+            var btn = document.getElementById('btn');
+            btn.onclick = function () {
+                
+                var username = document.getElementById('username').value;
+                var age = document.getElementById('age').value;
+                var params = 'username=' + username + '&age=' + age;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://localhost:3000/get?" + params);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send();
+                xhr.onload = function () {
+                    var resTxt = JSON.parse(xhr.responseText);
+                    console.log(resTxt);
+                }
+            }
+            /* var xhr = new XMLHttpRequest();
+            //xhr.open("get", "http://localhost:3000/first");
+            xhr.open("get", "http://localhost:3000/responseData");
+            xhr.send();
+            xhr.onload = function () {
+                console.log(xhr.responseText);
+                console.log(typeof xhr.responseText);
+                var resTxt = JSON.parse(xhr.responseText);
+                console.log(resTxt);
+                var str = '<h2>' + resTxt.name + '</h2>';
+                document.body.innerHTML = str;
+            } */
+        </script>
+    </body>
+</html>
