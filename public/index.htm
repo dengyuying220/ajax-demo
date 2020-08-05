@@ -17,12 +17,17 @@
                 var params = 'username=' + username + '&age=' + age;
 
                 var xhr = new XMLHttpRequest();
-                xhr.open("post", "http://localhost:3000/get?" + params);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.send();
+                //xhr.open("get", "http://localhost:3000/get?" + params);//get
+                //xhr.open("post", "http://localhost:3000/post");
+                xhr.open("post", "http://localhost:3000/json");
+                //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');//post    'username=' + username + '&age=' + age;
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                //xhr.send(params);
+                var json = {name: username, age: age};
+                xhr.send(JSON.stringify(json));
                 xhr.onload = function () {
-                    var resTxt = JSON.parse(xhr.responseText);
-                    console.log(resTxt);
+                    //var resTxt = JSON.parse(xhr.responseText);
+                    console.log(xhr.responseText);
                 }
             }
             /* var xhr = new XMLHttpRequest();
