@@ -1,47 +1,101 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>ajax</title>
-    </head>
-    <body>
-        <input type="text" id="username">
-        <input type="number" id="age">
-        <input type="button" id="btn" value="提交">
-        <script>
-            var btn = document.getElementById('btn');
-            btn.onclick = function () {
-                
-                var username = document.getElementById('username').value;
-                var age = document.getElementById('age').value;
-                var params = 'username=' + username + '&age=' + age;
 
-                var xhr = new XMLHttpRequest();
-                //xhr.open("get", "http://localhost:3000/get?" + params);//get
-                //xhr.open("post", "http://localhost:3000/post");
-                xhr.open("post", "http://localhost:3000/json");
-                //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');//post    'username=' + username + '&age=' + age;
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                //xhr.send(params);
-                var json = {name: username, age: age};
-                xhr.send(JSON.stringify(json));
-                xhr.onload = function () {
-                    //var resTxt = JSON.parse(xhr.responseText);
-                    console.log(xhr.responseText);
-                }
-            }
-            /* var xhr = new XMLHttpRequest();
-            //xhr.open("get", "http://localhost:3000/first");
-            xhr.open("get", "http://localhost:3000/responseData");
-            xhr.send();
-            xhr.onload = function () {
-                console.log(xhr.responseText);
-                console.log(typeof xhr.responseText);
-                var resTxt = JSON.parse(xhr.responseText);
-                console.log(resTxt);
-                var str = '<h2>' + resTxt.name + '</h2>';
-                document.body.innerHTML = str;
-            } */
-        </script>
-    </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>ajax</title>
+</head>
+
+<body>
+  <input type="text" id="username" />
+  <input type="number" id="age" />
+  <input type="button" id="btn" value="提交" />
+  <script>
+    function ajax(options) {
+      var params = '';
+      var xhr = new XMLHttpRequest();
+
+      for (var attr in options.data) {
+        params += attr + '=' + options.data[attr] + '&';
+      }
+      params = params.substr(0, params.length - 1); //去掉最后一个&
+      if (options.type === 'get') {
+        options.url = options.url + '?' + params;
+      }
+      xhr.open(options.type, options.url);
+      if (options.type === 'get') {
+        xhr.send();
+      } else if (options.type === 'post') {
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(params);
+      }
+
+
+
+      xhr.onload = function () {
+        options.success(xhr);
+
+      }
+
+    }
+    ajax({
+      type: 'post',
+      url: 'http://localhost:3000/second',
+      data: {
+        name: "zhangsan",
+        age: 20
+      },
+      success: function (xhr) {
+        console.log(xhr.responseText);
+      }
+    });
+    var btn = document.getElementById("btn");
+    btn.onclick = function () {
+      var username = document.getElementById("username").value;
+      var age = document.getElementById("age").value;
+      var params = "username=" + username + "&age=" + age;
+
+      var xhr = new XMLHttpRequest();
+      //xhr.open("get", "http://localhost:3000/get?" + params);//get
+      //xhr.open("post", "http://localhost:3000/post");
+      //xhr.open("post", "http://localhost:3000/json");
+      //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');//post    'username=' + username + '&age=' + age;
+      //xhr.setRequestHeader('Content-Type', 'application/json');
+      //xhr.send(params);
+      //var json = {name: username, age: age};
+      //xhr.send(JSON.stringify(json));
+      xhr.open("get", "http://localhost:3000/cache");
+      xhr.send();
+      xhr.onreadystatechange = function () {};
+      /* xhr.onload = function () {
+        //var resTxt = JSON.parse(xhr.responseText);
+        //console.log(xhr.responseText);
+           if (xhr.status == "400") {
+            //http状态吗
+            alert("请求出错"); //xhr.readyState ajax状态码
+          }
+        
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          alert(xhr.responseText);
+        }
+      }; */
+      xhr.onerror = function () {
+        alert("网络中断");
+      };
+    };
+    /* var xhr = new XMLHttpRequest();
+      //xhr.open("get", "http://localhost:3000/first");
+      xhr.open("get", "http://localhost:3000/responseData");
+      xhr.send();
+      xhr.onload = function () {
+          console.log(xhr.responseText);
+          console.log(typeof xhr.responseText);
+          var resTxt = JSON.parse(xhr.responseText);
+          console.log(resTxt);
+          var str = '<h2>' + resTxt.name + '</h2>';
+          document.body.innerHTML = str;
+      } */
+  </script>
+</body>
+
 </html>
