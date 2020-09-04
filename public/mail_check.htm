@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- bootsrap -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <title>验证邮箱地址</title>
+    <link rel="stylesheet" href="./bootstrap-3.3.7/css/bootstrap.min.css" />
+    <!-- <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        /* 响应式布局 */
+        /* 手机 */
+        @media screen and (max-width: 767px) {
+            .container {
+                width: 100%;
+            }
+
+            .container ul li {
+                width: 33.3%;
+            }
+
+        }
+
+        /* pad */
+        @media screen and (min-width: 768px) {
+            .container {
+                width: 750px;
+            }
+
+            .container ul li {
+                width: 93.5px;
+            }
+        }
+
+        /* 中等 */
+        @media screen and (min-width: 992px) {
+            .container {
+                width: 970px;
+            }
+
+            .container ul li {
+                width: 121.25px;
+            }
+        }
+
+        /* 大 */
+        @media screen and (min-width: 1200px) {
+            .container {
+                width: 1170px;
+            }
+
+            .container ul li {
+                width: 121.25px;
+            }
+        }
+
+        .container {
+            /* height: 150px; */
+            /* background-color: pink; */
+            margin: 0 auto;
+        }
+
+        .container ul {
+            list-style: none;
+            margin: 0 auto;
+        }
+
+        .container ul li {
+
+            height: 30px;
+            background-color: green;
+            float: left;
+        }
+
+        #inp {
+            border: 1px solid #c4c7ce;
+            border-radius: 3px;
+            width: 250px;
+            height: 20px;
+            padding: 5px 0 5px 9px;
+
+        }
+
+        #inp:focus {
+            border-color: #4e6ef2 !important;
+            outline: 0px solid #4e6ef2;
+            box-shadow: #4e6ef2 0 0 3px;
+
+        }
+    </style> -->
+</head>
+
+<body>
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="exampleInputEmail2">Email</label>
+            <input type="email" class="form-control" id="inputEmail" placeholder="jane.doe@example.com" />
+            <!-- bg-success bg-danger -->
+            <p class="" style="padding: 15px" id="info"></p>
+        </div>
+    </form>
+    <script>
+        var inputEmail = document.getElementById("inputEmail");
+        var info = document.getElementById("info");
+        inputEmail.onblur = function () {
+            console.log(this);
+            var val = this.value;
+            var reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+            if (!reg.test(val)) {
+                info.className = "bg-danger";
+                info.textContent = "格式错误";
+                return;
+            }
+
+            ajax({
+                url: 'http://localhost:3000/verifyEmailAddress',
+                data: {
+                    email: val,
+                }
+            }, info)
+        };
+
+        function ajax(options, info) {
+            var defaults = {
+                type: "get",
+                url: "",
+                data: {},
+                header: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                success: function (re) {
+                    info.className = "bg-success";
+                    info.textContent = re.responseText;
+                },
+                error: function (re) {
+                    info.className = "bg-danger";
+                    info.textContent = re.responseText;
+                },
+            };
+            var params = "";
+
+            Object.assign(defaults, options);
+            var xhr = new XMLHttpRequest();
+            for (var attr in defaults.data) {
+                params += attr + "=" + defaults.data[attr] + "&";
+            }
+            params = params.slice(0, params.length - 1);
+            //console.log(params);
+
+            if (defaults.type == "get") {
+                defaults.url = defaults.url + "?" + params;
+            }
+
+            xhr.open(defaults.type, defaults.url);
+
+            if (defaults.type == "post") {
+                var conType = defaults.header["Content-Type"];
+                xhr.setRequestHeader("Content-Type", conType);
+                if (conType === "application/x-www-form-urlencoded") {
+                    xhr.send(params);
+                } else if (conType === "application/json") {
+                    xhr.send(JSON.stringify(defaults.data));
+                    //console.log(JSON.stringify(defaults.data));
+                }
+            } else {
+                xhr.send();
+            }
+
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var conType = xhr.getResponseHeader("Content-Type");
+                    console.log(conType);
+                    if (conType.includes("application/json")) {
+                        var data = JSON.parse(xhr.responseText);
+                        defaults.success(data, xhr);
+                    } else {
+                        defaults.success(xhr);
+                    }
+
+                } else {
+                    defaults.error(xhr);
+                }
+            };
+        }
+    </script>
+    <!-- <div class="container">
+        <button type="button" class="btn btn-danger">（危险）Danger</button>
+        <ul>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+        </ul>
+         <div class="mail">
+            <label>邮箱地址</label><br>
+            <input type="email" id="inp">
+            <span class="hint"></span>
+        </div> 
+    </div> -->
+</body>
+
+</html>

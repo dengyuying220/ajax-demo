@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<head>
+    <title>ajax缓存</title>
+</head>
+
+<body>
+    <button id='btn'>发送ajax请求</button>
+    <script>
+        var btn = document.getElementById('btn');
+        btn.onclick = function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', 'http://localhost:3000/cache');
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                }
+            };
+        }
+    </script>
+</body>
