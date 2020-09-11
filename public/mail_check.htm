@@ -112,7 +112,7 @@
         var inputEmail = document.getElementById("inputEmail");
         var info = document.getElementById("info");
         inputEmail.onblur = function () {
-            console.log(this);
+            // console.log(this);
             var val = this.value;
             var reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
             if (!reg.test(val)) {
@@ -137,13 +137,17 @@
                 header: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                success: function (re) {
+                success: function (re, re2) {
                     info.className = "bg-success";
-                    info.textContent = re.responseText;
+                    info.textContent = re2.message;
+                    console.log(re.responseText);
+                    console.log(re2);
                 },
-                error: function (re) {
+                error: function (re, re2) {
                     info.className = "bg-danger";
-                    info.textContent = re.responseText;
+                    info.textContent = re2.message;
+                    console.log(re.responseText);
+                    console.log(re2);
                 },
             };
             var params = "";
@@ -176,18 +180,16 @@
             }
 
             xhr.onload = function () {
+                var conType = xhr.getResponseHeader("Content-Type");
+                console.log(conType);
+                var data = '';
+                if (conType.includes("application/json")) {
+                    data = JSON.parse(xhr.responseText);
+                }
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    var conType = xhr.getResponseHeader("Content-Type");
-                    console.log(conType);
-                    if (conType.includes("application/json")) {
-                        var data = JSON.parse(xhr.responseText);
-                        defaults.success(data, xhr);
-                    } else {
-                        defaults.success(xhr);
-                    }
-
+                    defaults.success(xhr, data);
                 } else {
-                    defaults.error(xhr);
+                    defaults.error(xhr, data);
                 }
             };
         }

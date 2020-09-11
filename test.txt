@@ -1,1 +1,195 @@
-hello, ajax again1111!
+{
+    "status": 0,
+    "msg": "ok",
+    "result": [
+        {
+            "id": 321,
+            "name": "成都",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "028",
+            "zipcode": "610000",
+            "depth": 2
+        },
+        {
+            "id": 322,
+            "name": "绵阳",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0816",
+            "zipcode": "621000",
+            "depth": 2
+        },
+        {
+            "id": 323,
+            "name": "阿坝",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0837",
+            "zipcode": "624600",
+            "depth": 2
+        },
+        {
+            "id": 324,
+            "name": "巴中",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0827",
+            "zipcode": "636600",
+            "depth": 2
+        },
+        {
+            "id": 325,
+            "name": "达州",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0818",
+            "zipcode": "635000",
+            "depth": 2
+        },
+        {
+            "id": 326,
+            "name": "德阳",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0838",
+            "zipcode": "618000",
+            "depth": 2
+        },
+        {
+            "id": 327,
+            "name": "甘孜",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0836",
+            "zipcode": "626700",
+            "depth": 2
+        },
+        {
+            "id": 328,
+            "name": "广安",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0826",
+            "zipcode": "638550",
+            "depth": 2
+        },
+        {
+            "id": 329,
+            "name": "广元",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0839",
+            "zipcode": "628000",
+            "depth": 2
+        },
+        {
+            "id": 330,
+            "name": "乐山",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0833",
+            "zipcode": "614000",
+            "depth": 2
+        },
+        {
+            "id": 331,
+            "name": "凉山",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0834",
+            "zipcode": "615000",
+            "depth": 2
+        },
+        {
+            "id": 332,
+            "name": "眉山",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "028",
+            "zipcode": "620000",
+            "depth": 2
+        },
+        {
+            "id": 333,
+            "name": "南充",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0817",
+            "zipcode": "637000",
+            "depth": 2
+        },
+        {
+            "id": 334,
+            "name": "内江",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0832",
+            "zipcode": "641000",
+            "depth": 2
+        },
+        {
+            "id": 335,
+            "name": "攀枝花",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0812",
+            "zipcode": "617000",
+            "depth": 2
+        },
+        {
+            "id": 336,
+            "name": "遂宁",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0825",
+            "zipcode": "629000",
+            "depth": 2
+        },
+        {
+            "id": 337,
+            "name": "雅安",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0835",
+            "zipcode": "625000",
+            "depth": 2
+        },
+        {
+            "id": 338,
+            "name": "宜宾",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0831",
+            "zipcode": "644600",
+            "depth": 2
+        },
+        {
+            "id": 339,
+            "name": "资阳",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "028",
+            "zipcode": "641300",
+            "depth": 2
+        },
+        {
+            "id": 340,
+            "name": "自贡",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0813",
+            "zipcode": "643000",
+            "depth": 2
+        },
+        {
+            "id": 341,
+            "name": "泸州",
+            "parentid": 25,
+            "parentname": "四川",
+            "areacode": "0830",
+            "zipcode": "646000",
+            "depth": 2
+        }
+    ]
+}

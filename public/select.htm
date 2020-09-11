@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <title>省市区三级联动下拉框</title>
+    <link rel="stylesheet" href="./bootstrap-3.3.7/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <form class="form-inline">
+        <select class="form-control" id="province">
+            <option>请选择省份</option>
+        </select>
+        <select class="form-control" id="city">
+            <option>请选择城市</option>
+        </select>
+        <select class="form-control" id="town">
+            <option>请选择县城</option>
+        </select>
+    </form>
+</body>
+<script src="./js/template-web.js"></script>
+<script id="tpl" type="text/html">
+    <option>请选择</option>
+    {{each result}}
+    <option value="{{$value.id}}">{{$value.name}}</option>
+    {{/each}}
+</script>
+<script>
+    var province = document.getElementById("province");
+    var city = document.getElementById("city");
+    var town = document.getElementById("town");
+    // 获取省份
+    ajax({
+        url: "/province",
+        data: {},
+        success: function (xhr, re2) {
+            console.log(xhr.responseText);
+            console.log(re2);
+            // var html = template('tpl', re.responseText);
+            var html = template("tpl", re2);
+            var province = document.getElementById("province");
+            province.innerHTML = html;
+
+        },
+        error: function (re, re2) {
+            console.log(re.responseText);
+            console.log(re2);
+        },
+    });
+    // 获取城市
+    province.onchange = function () {
+        var html = template("tpl", {
+            result: []
+        });
+        town.innerHTML = html;
+        var value = this.value;
+        console.log(value);
+        ajax({
+            url: "/city",
+            data: {
+                parentid: value
+            },
+            success: function (xhr, re2) {
+                console.log(re2);
+                var html = template("tpl", re2);
+                var city = document.getElementById("city");
+                city.innerHTML = html;
+            },
+            error: function (re, re2) {
+                console.log(re.responseText);
+                console.log(re2);
+            },
+        });
+    }
+
+    // 获取县城
+    city.onchange = function () {
+        var value = this.value;
+        console.log(value);
+        ajax({
+            url: "/town",
+            data: {
+                parentid: value
+            },
+            success: function (xhr, re2) {
+                console.log(re2);
+                var html = template("tpl", re2);
+                var town = document.getElementById("town");
+                town.innerHTML = html;
+            },
+            error: function (re, re2) {
+                console.log(re.responseText);
+                console.log(re2);
+            },
+        });
+    }
+
+    function ajax(options) {
+        var defaults = {
+            type: "get",
+            url: "http://localhost:3000",
+            data: {},
+            header: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            success: function () {},
+            error: function () {},
+        };
+        var params = "";
+
+        Object.assign(defaults, options);
+        var xhr = new XMLHttpRequest();
+        for (var attr in defaults.data) {
+            params += attr + "=" + defaults.data[attr] + "&";
+        }
+        params = params.slice(0, params.length - 1);
+        //console.log(params);
+
+        if (defaults.type == "get") {
+            defaults.url = defaults.url + "?" + params;
+        }
+
+        xhr.open(defaults.type, defaults.url);
+
+        if (defaults.type == "post") {
+            var conType = defaults.header["Content-Type"];
+            xhr.setRequestHeader("Content-Type", conType);
+            if (conType === "application/x-www-form-urlencoded") {
+                xhr.send(params);
+            } else if (conType === "application/json") {
+                xhr.send(JSON.stringify(defaults.data));
+                //console.log(JSON.stringify(defaults.data));
+            }
+        } else {
+            xhr.send();
+        }
+
+        xhr.onload = function () {
+            var conType = xhr.getResponseHeader("Content-Type");
+            console.log(conType);
+            var data = "";
+            if (conType.includes("application/json")) {
+                data = JSON.parse(xhr.responseText);
+            }
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                defaults.success(xhr, data);
+            } else {
+                defaults.error(xhr, data);
+            }
+        };
+    }
+</script>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+  <title>自动提示</title>
+  <link rel="stylesheet" href="./bootstrap-3.3.7/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="exampleInputName2">Name</label>
+      <input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="请输入搜索关键字" />
+      <ul class="list-unstyled" id="remin">
+        <li>提示文字</li>
+      </ul>
+    </div>
+  </form>
+  <script src="./js/template-web.js"></script>
+  <script id="tpl" type="text/html">
+    {{each list}}
+    <li>{{$value}}</li>
+    {{/each}}
+  </script>
+  <script>
+    var time = null;
+    var search = document.getElementById("search");
+    var remin = document.getElementById("remin");
+    search.oninput = function () {
+      var word = this.value;
+      //防抖
+      clearTimeout(time);
+      if (word.trim().length === 0) {
+        return;
+      }
+      time = setTimeout(function () {
+        ajax({
+          url: "http://localhost:3000/searchAutoPrompt",
+          data: {
+            key: word,
+          },
+          success: function (xhr, re2) {
+            console.log(xhr.responseText);
+            console.log(re2);
+            // var html = template('tpl', re.responseText);
+            var html = template("tpl", re2);
+            var bd = document.getElementById("remin");
+            bd.innerHTML = html;
+            console.log(html);
+          },
+          error: function (re, re2) {
+            console.log(re.responseText);
+            console.log(re2);
+          },
+        });
+      }, 800);
+    };
+
+    function ajax(options) {
+      var defaults = {
+        type: "get",
+        url: "",
+        data: {},
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        success: function () {},
+        error: function () {},
+      };
+      var params = "";
+
+      Object.assign(defaults, options);
+      var xhr = new XMLHttpRequest();
+      for (var attr in defaults.data) {
+        params += attr + "=" + defaults.data[attr] + "&";
+      }
+      params = params.slice(0, params.length - 1);
+      //console.log(params);
+
+      if (defaults.type == "get") {
+        defaults.url = defaults.url + "?" + params;
+      }
+
+      xhr.open(defaults.type, defaults.url);
+
+      if (defaults.type == "post") {
+        var conType = defaults.header["Content-Type"];
+        xhr.setRequestHeader("Content-Type", conType);
+        if (conType === "application/x-www-form-urlencoded") {
+          xhr.send(params);
+        } else if (conType === "application/json") {
+          xhr.send(JSON.stringify(defaults.data));
+          //console.log(JSON.stringify(defaults.data));
+        }
+      } else {
+        xhr.send();
+      }
+
+      xhr.onload = function () {
+        var conType = xhr.getResponseHeader("Content-Type");
+        console.log(conType);
+        var data = "";
+        if (conType.includes("application/json")) {
+          data = JSON.parse(xhr.responseText);
+        }
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          defaults.success(xhr, data);
+        } else {
+          defaults.error(xhr, data);
+        }
+      };
+    }
+  </script>
+</body>
+
+</html>
